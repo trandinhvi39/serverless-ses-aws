@@ -1,0 +1,21 @@
+service: serverless-node
+
+plugins:
+  - serverless-dotenv-plugin
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  region: ${env:REGION}
+
+package:
+  include:
+    - ../../services/mailer/**
+
+functions:
+  sendEmail:
+    handler: index.handler
+    events:
+      - sqs:
+          arn: ${env:SQS_ARN}
+          batchSize: ${env:BATCH_SIZE}
